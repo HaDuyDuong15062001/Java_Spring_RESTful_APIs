@@ -3,6 +3,8 @@ package com.duyduong.jobhunter.controller;
 import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,7 +19,7 @@ public class UserController {
 
 
     @GetMapping("/user/create")
-    public String createNewUser() {
+    public String createNewUserGetMethod() {
 
         User user = new User();
         user.setEmail("haduyduong@gmail.com");
@@ -27,4 +29,11 @@ public class UserController {
         this.userService.handleCreateUser(user);
         return "create user";
     }
+
+    @PostMapping("/user/create")
+    public String createNewUserPostMethod(@RequestBody User userPost) {
+        this.userService.handleCreateUser(userPost);
+        return "create user";
+    }
+
 }
