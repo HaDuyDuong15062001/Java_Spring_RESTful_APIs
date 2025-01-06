@@ -2,10 +2,10 @@ package com.duyduong.jobhunter.controller;
 
 import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 
@@ -18,22 +18,31 @@ public class UserController {
     }
 
 
-    @GetMapping("/user/create")
-    public String createNewUserGetMethod() {
-
-        User user = new User();
-        user.setEmail("haduyduong@gmail.com");
-        user.setFullName("Ha Duy Duong");
-        user.setPassword("12345");
-
-        this.userService.handleCreateUser(user);
-        return "create user";
+    @GetMapping("/user/{id}")
+    public User getUserById(@PathVariable("id") Long id) {
+        return this.userService.handleFindUserById(id);
     }
 
-    @PostMapping("/user/create")
-    public String createNewUserPostMethod(@RequestBody User userPost) {
-        this.userService.handleCreateUser(userPost);
-        return "create user";
+    @GetMapping("/user")
+    public List<User> getAllUser() {
+        List<User> arrUsers = this.userService.handleFindAllUser();
+        return arrUsers;
     }
 
+    @PostMapping("/user")
+    public User createNewUserPostMethod(@RequestBody User userPost) {
+        User newUser = this.userService.handleCreateUser(userPost);
+        return newUser;
+    }
+
+    @DeleteMapping("/user/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
+        this.userService.handleDeleteUser(id);
+        return "delete user with id = " + id;
+    }
+
+    @PutMapping("/user")
+    public User updateUser(@RequestBody User userPut){
+        return this.userService.handleUpdateUser(userPut);
+    }
 }
