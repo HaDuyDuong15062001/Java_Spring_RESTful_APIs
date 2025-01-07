@@ -2,6 +2,7 @@ package com.duyduong.jobhunter.controller;
 
 import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.service.UserService;
+import com.duyduong.jobhunter.service.error.IdInvalidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +38,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(arrUsers);
     }
 
+    @ExceptionHandler(value = IdInvalidException.class)
+    public ResponseEntity<String> handleIdException(IdInvalidException idInvalidException) {
+        return ResponseEntity.badRequest().body(idInvalidException.getMessage());
+    }
+
+
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id ) throws IdInvalidException {
+        if (id >= 1500) {
+            throw new IdInvalidException("Id khong lon hon 1500");
+        }
         this.userService.handleDeleteUser(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Id " + id + " is deleted");
     }
