@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class JobhunterApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(JobhunterApplication.class, args);
 	}
 
