@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalException {
     @ExceptionHandler(value = IdInvalidException.class)
-    public ResponseEntity<String> handleIdException(IdInvalidException idInvalidException) {
-
+    public ResponseEntity<RestResponse<Object>> handleIdException(IdInvalidException idException) {
         RestResponse<Object> res = new RestResponse<Object>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        res.setError(idInvalidException.getMessage());
-        return ResponseEntity.badRequest().body(idInvalidException.getMessage());
+        res.setError(idException.getMessage());
+        res.setMessage("IdInvalidException");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
 }

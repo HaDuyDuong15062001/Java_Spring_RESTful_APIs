@@ -5,6 +5,7 @@ import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.service.error.IdInvalidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,13 +16,17 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/users")
     public ResponseEntity<User> createNewUserPostMethod(@RequestBody User userPost) {
+        String hashPassword = this.passwordEncoder.encode(userPost.getPassword());
+        userPost.setPassword(hashPassword);
         User newUser = this.userService.handleCreateUser(userPost);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }

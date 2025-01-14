@@ -2,6 +2,7 @@ package com.duyduong.jobhunter.service;
 
 import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,11 +10,15 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
+
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+
 
     public User handleCreateUser(User user) {
         return this.userRepository.save(user);
