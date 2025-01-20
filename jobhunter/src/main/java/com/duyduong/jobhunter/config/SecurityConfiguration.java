@@ -23,10 +23,12 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(
                         authz -> authz
-                                .requestMatchers("/").permitAll()
+                                .requestMatchers("/**").permitAll()
+
                                 .anyRequest().authenticated()
 
                 )
+                .formLogin(f -> f.permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
