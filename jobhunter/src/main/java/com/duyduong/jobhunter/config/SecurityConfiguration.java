@@ -25,10 +25,10 @@ public class SecurityConfiguration {
                         authz -> authz
                                 .requestMatchers("/**").permitAll()
 
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
 
                 )
-                .formLogin(f -> f.permitAll())
+                .formLogin(f -> f.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
