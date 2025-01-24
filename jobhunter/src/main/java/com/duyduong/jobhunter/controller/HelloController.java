@@ -1,6 +1,6 @@
 package com.duyduong.jobhunter.controller;
 
-import com.duyduong.jobhunter.service.error.IdInvalidException;
+import com.duyduong.jobhunter.util.error.IdInvalidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

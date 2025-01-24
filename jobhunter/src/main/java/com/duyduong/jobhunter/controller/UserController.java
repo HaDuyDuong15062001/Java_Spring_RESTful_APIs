@@ -2,14 +2,13 @@ package com.duyduong.jobhunter.controller;
 
 import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.service.UserService;
-import com.duyduong.jobhunter.service.error.IdInvalidException;
+import com.duyduong.jobhunter.util.error.IdInvalidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 
