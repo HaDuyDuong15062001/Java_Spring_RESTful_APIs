@@ -1,6 +1,8 @@
 package com.duyduong.jobhunter.controller;
 
 import com.duyduong.jobhunter.domain.dto.LoginDTO;
+import com.duyduong.jobhunter.domain.dto.ResLoginDTO;
+import com.duyduong.jobhunter.util.SecurityUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,13 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder) {
+    private final SecurityUtil securityUtil;
+    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.securityUtil = securityUtil;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
         //Nạp input gồm username/password vào Security
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
@@ -28,6 +31,10 @@ public class AuthController {
         //xác thực người dùng => cần viết hàm loadUserByUsername
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        return ResponseEntity.ok().body(loginDTO);
+        //create a token
+        String accessToken = this.securityUtil.createToken(authentication);
+        ResLoginDTO res = new ResLoginDTO();
+        res.setAcccToken(accessToken);
+        return ResponseEntity.ok().body(res);
     }
 }

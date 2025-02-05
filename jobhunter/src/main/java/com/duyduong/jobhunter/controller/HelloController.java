@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
     @GetMapping("/hello")
     public String getHello() throws IdInvalidException {
-        if (true)
-            throw new IdInvalidException("check exception in HelloController");
         return "Hello from HelloController";
 
     }
