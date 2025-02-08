@@ -22,7 +22,6 @@ public class SecurityUtil {
 
     private final JwtEncoder jwtEncoder;
 
-
     public SecurityUtil(JwtEncoder jwtEncoder) {
         this.jwtEncoder = jwtEncoder;
     }
