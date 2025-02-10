@@ -1,8 +1,5 @@
 package com.duyduong.jobhunter.domain;
 
-import lombok.Builder;
-
-@Builder
 public class RestResponse<T>{
     private int statusCode;
     private String error;
