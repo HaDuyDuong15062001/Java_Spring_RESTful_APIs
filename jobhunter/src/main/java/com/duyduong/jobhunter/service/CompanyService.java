@@ -48,10 +48,12 @@ public class CompanyService {
     }
 
     public void handleDeleteCompany(Long id) {
-        Optional<Company> company = companyRespository.findById(id);
-        if (company.isEmpty()) {
-            throw new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND, List.of(id));
-        }
+        Company company = companyRespository.findById(id).orElseThrow(
+                () -> new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND, List.of(id))
+        );
+//       if (company.isEmpty()) {
+//            throw new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND, List.of(id));
+//        }
         this.companyRespository.deleteById(id);
     }
 }
