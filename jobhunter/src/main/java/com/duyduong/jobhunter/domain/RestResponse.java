@@ -18,11 +18,20 @@ public class RestResponse<T>{
         this.message = message;
     }
 
+    public RestResponse(int statusCode, Object message, T data) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.data = data;
+    }
+
     public int getStatusCode() {
         return statusCode;
     }
     public static <T> RestResponse<T> success(Object message) {
         return new RestResponse<>(200, message);
+    }
+    public static <T> RestResponse<T> failed(Object message, T data) {
+        return new RestResponse<>(400, message, data);
     }
 
     public void setStatusCode(int statusCode) {

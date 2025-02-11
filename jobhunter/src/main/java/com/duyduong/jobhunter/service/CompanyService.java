@@ -1,7 +1,9 @@
 package com.duyduong.jobhunter.service;
 
+import com.duyduong.jobhunter.constant.JobHunterError;
 import com.duyduong.jobhunter.domain.Company;
 import com.duyduong.jobhunter.repository.CompanyRespository;
+import com.duyduong.jobhunter.util.error.JobHunterException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,10 @@ public class CompanyService {
     }
 
     public void handleDeleteCompany(Long id) {
+        Optional<Company> company = companyRespository.findById(id);
+        if (company.isEmpty()) {
+            throw new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND, List.of(id));
+        }
         this.companyRespository.deleteById(id);
     }
 }

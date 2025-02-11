@@ -21,6 +21,7 @@ public class GlobalException {
             IdInvalidException.class,
             UsernameNotFoundException.class,
             BadCredentialsException.class
+           // JobHunterException.class
     })
 
 //    public ResponseEntity<RestResponse<Object>> handleIdException(Exception ex) {
@@ -52,5 +53,12 @@ public class GlobalException {
         res.setMessage(errors.size() > 1 ? errors : errors.get(0));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+    }
+
+    @ExceptionHandler(JobHunterException.class)
+    public ResponseEntity<RestResponse<Object>> handleJobHunterException(JobHunterException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                RestResponse.failed(ex.getErrorCode(), ex.getErrorList())
+        );
     }
 }

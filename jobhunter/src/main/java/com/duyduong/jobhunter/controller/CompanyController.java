@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/companies")
 public class CompanyController {
     private final CompanyService companyService;
 
@@ -21,25 +22,25 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @PostMapping("/companies")
+    @PostMapping
     public ResponseEntity<Company> createNewCompanyPostMethod (@Valid @RequestBody Company companyPost) {
         Company newCompany = this.companyService.handleCreateCompany(companyPost);
         return ResponseEntity.status(HttpStatus.CREATED).body(newCompany);
     }
 
-    @GetMapping("/companies")
+    @GetMapping
     public ResponseEntity<List<Company>> getAllCompany() {
         List<Company> arrCom = this.companyService.handleGetAllCompany();
         return ResponseEntity.status(HttpStatus.OK).body(arrCom);
     }
 
-    @PutMapping("/companies")
+    @PutMapping
     public ResponseEntity<Company> updateCompany(@Valid @RequestBody Company c) {
         Company company = this.companyService.handleUpdateCompany(c);
         return ResponseEntity.status(HttpStatus.OK).body(company);
     }
 
-    @DeleteMapping("/companies/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompanyById(@PathVariable("id") Long id) {
         this.companyService.handleDeleteCompany(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
