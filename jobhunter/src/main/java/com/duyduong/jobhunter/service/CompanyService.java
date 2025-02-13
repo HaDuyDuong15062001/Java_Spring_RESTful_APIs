@@ -28,7 +28,7 @@ public class CompanyService {
     }
 
     public ResultPaginationDTO handleGetAllCompany(Pageable pageable) {
-        Page<Company>  companyPage = this.companyRespository.findAll(pageable);
+        Page<Company> companyPage = this.companyRespository.findAll(pageable);
         ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
         MetaDTO meta = new MetaDTO();
 
@@ -44,22 +44,22 @@ public class CompanyService {
     }
 
     public Company handleGetCompanyById(Long id) {
-        Company company = companyRespository.findById(id).orElseThrow(
+        Company company = this.companyRespository.findById(id).orElseThrow(
                 () -> new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND, List.of(id))
         );
         return company;
     }
 
     public Company handleUpdateCompany(Company company) {
-        Company curCom = this.handleGetCompanyById(company.getId());
-        if (curCom != null) {
-            curCom.setName(company.getName());
-            curCom.setLogo(company.getLogo());
-            curCom.setAddress(company.getAddress());
-            curCom.setDescription(company.getDescription());
-            this.companyRespository.save(curCom);
-        }
-        return curCom;
+
+        Company newCompany = this.handleGetCompanyById(company.getId());
+
+        newCompany.setName(company.getName());
+        newCompany.setLogo(company.getLogo());
+        newCompany.setAddress(company.getAddress());
+        newCompany.setDescription(company.getDescription());
+        this.companyRespository.save(newCompany);
+        return newCompany;
     }
 
     public void handleDeleteCompany(Long id) {

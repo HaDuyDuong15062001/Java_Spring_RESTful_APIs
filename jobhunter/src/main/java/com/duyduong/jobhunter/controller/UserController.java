@@ -1,14 +1,18 @@
 package com.duyduong.jobhunter.controller;
 
 import com.duyduong.jobhunter.domain.User;
+import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.util.error.IdInvalidException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 
@@ -37,16 +41,20 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUser() {
-        List<User> arrUsers = this.userService.handleFindAllUser();
-        return ResponseEntity.status(HttpStatus.OK).body(arrUsers);
+    public ResponseEntity<ResultPaginationDTO> getAllUser(
+            @RequestParam("current") Optional<String> currentOptional,
+            @RequestParam("pageSize") Optional<String> pageSizeOptional
+            ) {
+        String sCurrent = currentOptional.isPresent() ? currentOptional.get() : "";
+        String sPageSize = pageSizeOptional.isPresent() ? pageSizeOptional.get() : "";
+        int current = Integer.parseInt(sCurrent) - 1;
+        int pageSize = Integer.parseInt(sPageSize);
+        Pageable pageable = PageRequest.of(current, pageSize);
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.handleFindAllUser(pageable));
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id ) throws IdInvalidException {
-        if (id >= 1500) {
-            throw new IdInvalidException("Id khong lon hon 1500");
-        }
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id )  {
         this.userService.handleDeleteUser(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Id " + id + " is deleted");
     }
