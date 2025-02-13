@@ -2,8 +2,13 @@ package com.duyduong.jobhunter.service;
 
 import com.duyduong.jobhunter.constant.JobHunterError;
 import com.duyduong.jobhunter.domain.Company;
+import com.duyduong.jobhunter.domain.dto.MetaDTO;
+import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.duyduong.jobhunter.repository.CompanyRespository;
 import com.duyduong.jobhunter.util.error.JobHunterException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +27,27 @@ public class CompanyService {
         return this.companyRespository.save(company);
     }
 
-    public List<Company> handleGetAllCompany() {
-        return this.companyRespository.findAll();
+    public ResultPaginationDTO handleGetAllCompany(Pageable pageable) {
+        Page<Company>  companyPage = this.companyRespository.findAll(pageable);
+        ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
+        MetaDTO meta = new MetaDTO();
+
+        meta.setPage(companyPage.getNumber());
+        meta.setPageSize(companyPage.getSize());
+
+        meta.setPages(companyPage.getTotalPages());
+        meta.setTotal(companyPage.getTotalElements());
+
+        resultPaginationDTO.setMeta(meta);
+        resultPaginationDTO.setResult(companyPage.getContent());
+        return resultPaginationDTO;
     }
 
     public Company handleGetCompanyById(Long id) {
-        Optional<Company> company = this.companyRespository.findById(id);
-        if(company.isPresent())
-            return company.get();
-        return null;
+        Company company = companyRespository.findById(id).orElseThrow(
+                () -> new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND, List.of(id))
+        );
+        return company;
     }
 
     public Company handleUpdateCompany(Company company) {
@@ -40,8 +57,6 @@ public class CompanyService {
             curCom.setLogo(company.getLogo());
             curCom.setAddress(company.getAddress());
             curCom.setDescription(company.getDescription());
-//            curCom.setCreatedBy(company.getCreatedBy());
-//            curCom.setCreatedAt(company.getCreatedAt());
             this.companyRespository.save(curCom);
         }
         return curCom;
@@ -51,9 +66,6 @@ public class CompanyService {
         Company company = companyRespository.findById(id).orElseThrow(
                 () -> new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND, List.of(id))
         );
-//       if (company.isEmpty()) {
-//            throw new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND, List.of(id));
-//        }
         this.companyRespository.deleteById(id);
     }
 }
