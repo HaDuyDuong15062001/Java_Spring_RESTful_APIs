@@ -4,8 +4,10 @@ import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.util.error.IdInvalidException;
+import com.turkraft.springfilter.boot.Filter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,25 +44,20 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<ResultPaginationDTO> getAllUser(
-            @RequestParam("current") Optional<String> currentOptional,
-            @RequestParam("pageSize") Optional<String> pageSizeOptional
-            ) {
-        String sCurrent = currentOptional.isPresent() ? currentOptional.get() : "";
-        String sPageSize = pageSizeOptional.isPresent() ? pageSizeOptional.get() : "";
-        int current = Integer.parseInt(sCurrent) - 1;
-        int pageSize = Integer.parseInt(sPageSize);
-        Pageable pageable = PageRequest.of(current, pageSize);
-        return ResponseEntity.status(HttpStatus.OK).body(this.userService.handleFindAllUser(pageable));
+            @Filter Specification<User> spec,
+            Pageable pageable
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.handleFindAllUser(spec, pageable));
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id )  {
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
         this.userService.handleDeleteUser(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Id " + id + " is deleted");
     }
 
     @PutMapping("/users")
-    public ResponseEntity<User> updateUser(@RequestBody User userPut){
+    public ResponseEntity<User> updateUser(@RequestBody User userPut) {
         User user = this.userService.handleUpdateUser(userPut);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }

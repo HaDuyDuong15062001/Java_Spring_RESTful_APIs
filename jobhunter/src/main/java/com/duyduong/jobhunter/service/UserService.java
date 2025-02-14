@@ -10,6 +10,7 @@ import com.duyduong.jobhunter.repository.UserRepository;
 import com.duyduong.jobhunter.util.error.JobHunterException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,12 +42,12 @@ public class UserService {
         return user;
     }
 
-    public ResultPaginationDTO handleFindAllUser(Pageable pageable) {
-        Page<User> userPage = this.userRepository.findAll(pageable);
+    public ResultPaginationDTO handleFindAllUser(Specification<User> specification, Pageable pageable) {
+        Page<User> userPage = this.userRepository.findAll(specification, pageable);
         ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
         MetaDTO meta = new MetaDTO();
 
-        meta.setPage(userPage.getNumber());
+        meta.setPage(userPage.getNumber() - 1);
         meta.setPageSize(userPage.getSize());
 
         meta.setPages(userPage.getTotalPages());
