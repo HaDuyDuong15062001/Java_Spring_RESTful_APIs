@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: jobhunter
+  datasource:
+    url: jdbc:mysql://localhost:3306/jobhunter
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    persistAuthorization: true
+    tryItOutEnabled: true
+    csrf:
+      enabled: true
+    operationsSorter: method
+    tags-sorter: alpha
+
+logging:  # C?u hình logging ???c ??t ? ?ây, ngang hàng v?i springdoc
+  level:
+    org.springdoc: DEBUG
+    # Ho?c n?u b?n mu?n log t?t c? các package c?a ?ng d?ng c?a b?n ? m?c DEBUG
+    # com.duyduong.jobhunter: DEBUG  # Thay com.duyduong.jobhunter b?ng package g?c c?a b?n
+    # Ho?c log toàn b? Spring
+    # org.springframework: DEBUG
+
+duyduong:
+  jwt:
+    base64-secret: 74tF1lZAeDEkC7u6XOP+vbDMhX20/geTTrOCGNO96gkoBAo5hk4M4RQ6bbP63MjmrhB3p2lsFJnrzlfFl/potw==
+    token-validity-in-seconds: 8640000
