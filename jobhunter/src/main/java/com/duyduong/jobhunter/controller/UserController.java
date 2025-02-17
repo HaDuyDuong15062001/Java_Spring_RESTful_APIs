@@ -3,6 +3,7 @@ package com.duyduong.jobhunter.controller;
 import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.duyduong.jobhunter.service.UserService;
+import com.duyduong.jobhunter.util.annotation.ApiMessage;
 import com.duyduong.jobhunter.util.error.IdInvalidException;
 import com.turkraft.springfilter.boot.Filter;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-
+@RequestMapping("api/v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -28,7 +29,8 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/users")
+    @ApiMessage("Create new user")
+    @PostMapping
     public ResponseEntity<User> createNewUserPostMethod(@RequestBody User userPost) {
         String hashPassword = this.passwordEncoder.encode(userPost.getPassword());
         userPost.setPassword(hashPassword);
@@ -36,27 +38,30 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @GetMapping("/users/{id}")
+    @ApiMessage("Get user by id")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
         User user = this.userService.handleFindUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @GetMapping("/users")
+    @ApiMessage("Get all user")
+    @GetMapping
     public ResponseEntity<ResultPaginationDTO> getAllUser(
-            @Filter Specification<User> spec,
-            Pageable pageable
+            @Filter Specification<User> spec, Pageable pageable
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.handleFindAllUser(spec, pageable));
     }
 
-    @DeleteMapping("/users/{id}")
+    @ApiMessage("Delete user by id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
         this.userService.handleDeleteUser(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Id " + id + " is deleted");
     }
 
-    @PutMapping("/users")
+    @ApiMessage("Update user")
+    @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User userPut) {
         User user = this.userService.handleUpdateUser(userPut);
         return ResponseEntity.status(HttpStatus.OK).body(user);

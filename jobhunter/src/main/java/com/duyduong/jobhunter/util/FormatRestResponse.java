@@ -2,6 +2,7 @@ package com.duyduong.jobhunter.util;
 
 
 import com.duyduong.jobhunter.domain.RestResponse;
+import com.duyduong.jobhunter.util.annotation.ApiMessage;
 import com.sun.net.httpserver.HttpsServer;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
@@ -43,7 +44,8 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
             return body;
         } else {
             res.setData(body);
-            res.setMessage("CALL API SUCCESS");
+            ApiMessage apiMessage = returnType.getMethodAnnotation(ApiMessage.class);
+            res.setMessage(apiMessage != null ? apiMessage.value() : "CALL API SUCCESS");
         }
         return res;
     }

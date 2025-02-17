@@ -9,6 +9,7 @@ import com.duyduong.jobhunter.util.error.JobHunterException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -27,19 +28,20 @@ public class CompanyService {
         return this.companyRespository.save(company);
     }
 
-    public ResultPaginationDTO handleGetAllCompany(Pageable pageable) {
-        Page<Company> companyPage = this.companyRespository.findAll(pageable);
+    public ResultPaginationDTO handleGetAllCompany(Specification specification, Pageable pageable) {
+        Page<Company> companyPage = this.companyRespository.findAll(specification, pageable);
         ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
         MetaDTO meta = new MetaDTO();
 
-        meta.setPage(companyPage.getNumber() - 1);
-        meta.setPageSize(companyPage.getSize());
+        meta.setPage(pageable.getPageNumber() + 1);
+        meta.setPageSize(pageable.getPageSize());
 
         meta.setPages(companyPage.getTotalPages());
         meta.setTotal(companyPage.getTotalElements());
 
         resultPaginationDTO.setMeta(meta);
         resultPaginationDTO.setResult(companyPage.getContent());
+
         return resultPaginationDTO;
     }
 

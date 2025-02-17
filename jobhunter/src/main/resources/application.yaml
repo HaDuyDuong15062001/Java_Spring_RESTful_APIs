@@ -10,6 +10,10 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
 
 springdoc:
   swagger-ui:
@@ -21,15 +25,18 @@ springdoc:
     operationsSorter: method
     tags-sorter: alpha
 
-logging:  # C?u hình logging ???c ??t ? ?ây, ngang hàng v?i springdoc
+logging:  # C?u hï¿½nh logging ???c ??t ? ?ï¿½y, ngang hï¿½ng v?i springdoc
   level:
     org.springdoc: DEBUG
-    # Ho?c n?u b?n mu?n log t?t c? các package c?a ?ng d?ng c?a b?n ? m?c DEBUG
+    # Ho?c n?u b?n mu?n log t?t c? cï¿½c package c?a ?ng d?ng c?a b?n ? m?c DEBUG
     # com.duyduong.jobhunter: DEBUG  # Thay com.duyduong.jobhunter b?ng package g?c c?a b?n
-    # Ho?c log toàn b? Spring
+    # Ho?c log toï¿½n b? Spring
     # org.springframework: DEBUG
 
 duyduong:
   jwt:
     base64-secret: 74tF1lZAeDEkC7u6XOP+vbDMhX20/geTTrOCGNO96gkoBAo5hk4M4RQ6bbP63MjmrhB3p2lsFJnrzlfFl/potw==
     token-validity-in-seconds: 8640000
+
+
+
