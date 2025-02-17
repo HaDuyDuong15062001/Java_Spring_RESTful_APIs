@@ -1,46 +1,45 @@
 package com.duyduong.jobhunter.domain;
 
+import com.duyduong.jobhunter.myEnum.GenderEnum;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String fullName;
+
     private String email;
+
     private String password;
 
-    public String getEmail() {
-        return email;
-    }
+    private int age;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    @Enumerated(EnumType.STRING)
+    private GenderEnum gender;
 
-    public String getFullName() {
-        return fullName;
-    }
+    private String address;
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+    private String refreshToken;
 
-    public Long getId() {
-        return id;
-    }
+    private Instant createdAt;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Instant updatedAt;
 
-    public String getPassword() {
-        return password;
-    }
+    private String createdBy;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private String updatedBy;
 }
