@@ -5,8 +5,10 @@ import com.duyduong.jobhunter.constant.JobHunterError;
 import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.domain.dto.MetaDTO;
 import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
-import com.duyduong.jobhunter.domain.dto.request.UserReqDTO;
-import com.duyduong.jobhunter.domain.dto.response.UserResDTO;
+import com.duyduong.jobhunter.domain.dto.request.UserReqDTOCreate;
+import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
+import com.duyduong.jobhunter.domain.dto.response.UserResDTOCreate;
+import com.duyduong.jobhunter.domain.dto.response.UserResDTOUpdate;
 import com.duyduong.jobhunter.repository.UserRepository;
 import com.duyduong.jobhunter.util.error.JobHunterException;
 import jakarta.validation.Valid;
@@ -30,26 +32,25 @@ public class UserService {
         this.modelMapper = modelMapper;
     }
 
-    public UserResDTO handleCreateUser(UserReqDTO userReqDTO) {
+    public UserResDTOCreate handleCreateUser(UserReqDTOCreate userReqDTOCreate) {
 
-        //User user = convertUserReqDTO2User(userReqDTO);
-        User user = modelMapper(userReqDTO, User.class);
+        User user = this.modelMapper.map(userReqDTOCreate, User.class);
         this.userRepository.save(user);
-        UserResDTO userResDTO = convertUser2UserResDTO(user);
+        UserResDTOCreate userResDTOCreate = this.modelMapper.map(user, UserResDTOCreate.class);
 
-        return userResDTO;
+        return userResDTOCreate;
     }
 
     public void handleDeleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND, List.of(id))
+                () -> new JobHunterException(JobHunterError.USER_ID_NOT_FOUND, List.of(id))
         );
         this.userRepository.deleteById(id);
     }
 
     public User handleFindUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND, List.of(id))
+                () -> new JobHunterException(JobHunterError.USER_ID_NOT_FOUND, List.of(id))
         );
         return user;
     }
@@ -70,45 +71,25 @@ public class UserService {
         return resultPaginationDTO;
     }
 
-    public User handleUpdateUser(User user) {
+    public UserResDTOUpdate handleUpdateUser(UserReqDTOUpdate userReqDTOUpdate) {
 
-        User curUser = this.handleFindUserById(user.getId());
+        User user = this.modelMapper.map(userReqDTOUpdate, User.class);
+        this.userRepository.save(user);
+        UserResDTOUpdate UserResDTOUpdate  = this.modelMapper.map(user, UserResDTOUpdate.class);
 
-        curUser.setEmail(user.getEmail());
-        curUser.setFullName(user.getFullName());
-        curUser.setPassword(user.getPassword());
-        this.userRepository.save(curUser);
-        return curUser;
+        return UserResDTOUpdate;
     }
 
     public User handleGetUserByUsername(String username) {
         return this.userRepository.findByEmail(username);
     }
 
-    public boolean isEmailExist(@Valid UserReqDTO userReqDTO) {
-        return this.userRepository.existsByEmail(userReqDTO.getEmail());
+    public boolean isEmailExist(UserReqDTOCreate userReqDTOCreate) {
+        return this.userRepository.existsByEmail(userReqDTOCreate.getEmail());
     }
 
-    public UserResDTO convertUser2UserResDTO (User user) {
-        UserResDTO userResDTO = new UserResDTO();
-        userResDTO.setId(user.getId());
-        userResDTO.setFullName(user.getFullName());
-        userResDTO.setEmail(user.getEmail());
-        userResDTO.setAge(user.getAge());
-        userResDTO.setGender(user.getGender());
-        userResDTO.setAddress(user.getAddress());
-        userResDTO.setCreatedAt(user.getCreatedAt());
-        return userResDTO;
+    public boolean isIdExist(UserReqDTOUpdate userReqDTOUpdate) {
+        return this.userRepository.existsById(userReqDTOUpdate.getId());
     }
 
-    public User convertUserReqDTO2User (UserReqDTO userReqDTO) {
-        User user = new User();
-        user.setFullName(userReqDTO.getFullName());
-        user.setEmail(userReqDTO.getEmail());
-        user.setPassword(userReqDTO.getPassword());
-        user.setAge(userReqDTO.getAge());
-        user.setGender(userReqDTO.getGender());
-        user.setAddress(userReqDTO.getAddress());
-        return user;
-    }
 }

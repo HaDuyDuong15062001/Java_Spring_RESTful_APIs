@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level =  AccessLevel.PRIVATE)
-public class UserReqDTO {
+public class UserReqDTOCreate {
 
     @NotBlank(message = EError.NOT_NULL_OR_EMPTY)
     String fullName;

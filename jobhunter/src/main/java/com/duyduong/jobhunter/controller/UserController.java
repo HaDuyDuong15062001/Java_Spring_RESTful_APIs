@@ -2,8 +2,10 @@ package com.duyduong.jobhunter.controller;
 
 import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
-import com.duyduong.jobhunter.domain.dto.request.UserReqDTO;
-import com.duyduong.jobhunter.domain.dto.response.UserResDTO;
+import com.duyduong.jobhunter.domain.dto.request.UserReqDTOCreate;
+import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
+import com.duyduong.jobhunter.domain.dto.response.UserResDTOCreate;
+import com.duyduong.jobhunter.domain.dto.response.UserResDTOUpdate;
 import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.util.annotation.ApiMessage;
 import com.duyduong.jobhunter.util.error.IdInvalidException;
@@ -30,17 +32,17 @@ public class UserController {
 
     @ApiMessage("Create new user")
     @PostMapping
-    public ResponseEntity<UserResDTO> createNewUserPostMethod(@Valid @RequestBody UserReqDTO userReqDTO)
+    public ResponseEntity<UserResDTOCreate> createNewUserPostMethod(@Valid @RequestBody UserReqDTOCreate userReqDTOCreate)
             throws IdInvalidException {
-        boolean isEmailExist = this.userService.isEmailExist(userReqDTO);
+        boolean isEmailExist = this.userService.isEmailExist(userReqDTOCreate);
         if (isEmailExist) {
             throw new IdInvalidException(
-                    "Email " + userReqDTO.getEmail() + " đã tồn tại. Vui lòng sử dụng email khác!");
+                    "Email " + userReqDTOCreate.getEmail() + " đã tồn tại. Vui lòng sử dụng email khác!");
         }
-        String hashPassword = this.passwordEncoder.encode(userReqDTO.getPassword());
-        userReqDTO.setPassword(hashPassword);
-        UserResDTO userResDTO = this.userService.handleCreateUser(userReqDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResDTO);
+        String hashPassword = this.passwordEncoder.encode(userReqDTOCreate.getPassword());
+        userReqDTOCreate.setPassword(hashPassword);
+        UserResDTOCreate userResDTOCreate = this.userService.handleCreateUser(userReqDTOCreate);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResDTOCreate);
     }
 
     @ApiMessage("Get user by id")
@@ -67,8 +69,13 @@ public class UserController {
 
     @ApiMessage("Update user")
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User userPut) {
-        User user = this.userService.handleUpdateUser(userPut);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+    public ResponseEntity<UserResDTOUpdate> updateUser(@Valid @RequestBody UserReqDTOUpdate userReqDTOUpdate)
+            throws IdInvalidException{
+        boolean existById = this.userService.isIdExist(userReqDTOUpdate);
+        if (!existById) {
+            throw  new IdInvalidException("Id " + userReqDTOUpdate.getId() + " không tồn tại !!!");
+        }
+        UserResDTOUpdate userResDTOUpdate = this.userService.handleUpdateUser(userReqDTOUpdate);
+        return ResponseEntity.status(HttpStatus.OK).body(userResDTOUpdate);
     }
 }
