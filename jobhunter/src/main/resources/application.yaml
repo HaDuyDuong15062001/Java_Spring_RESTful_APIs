@@ -25,13 +25,9 @@ springdoc:
     operationsSorter: method
     tags-sorter: alpha
 
-logging:  # C?u h�nh logging ???c ??t ? ?�y, ngang h�ng v?i springdoc
+logging:
   level:
     org.springdoc: DEBUG
-    # Ho?c n?u b?n mu?n log t?t c? c�c package c?a ?ng d?ng c?a b?n ? m?c DEBUG
-    # com.duyduong.jobhunter: DEBUG  # Thay com.duyduong.jobhunter b?ng package g?c c?a b?n
-    # Ho?c log to�n b? Spring
-    # org.springframework: DEBUG
 
 duyduong:
   jwt:

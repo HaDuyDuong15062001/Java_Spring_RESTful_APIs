@@ -2,12 +2,15 @@ package com.duyduong.jobhunter.service;
 
 import com.duyduong.jobhunter.constant.JobHunterError;
 
-import com.duyduong.jobhunter.domain.Company;
 import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.domain.dto.MetaDTO;
 import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
+import com.duyduong.jobhunter.domain.dto.request.UserReqDTO;
+import com.duyduong.jobhunter.domain.dto.response.UserResDTO;
 import com.duyduong.jobhunter.repository.UserRepository;
 import com.duyduong.jobhunter.util.error.JobHunterException;
+import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,12 +23,21 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final ModelMapper modelMapper;
+
+    public UserService(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public User handleCreateUser(User user) {
-        return this.userRepository.save(user);
+    public UserResDTO handleCreateUser(UserReqDTO userReqDTO) {
+
+        //User user = convertUserReqDTO2User(userReqDTO);
+        User user = modelMapper(userReqDTO, User.class);
+        this.userRepository.save(user);
+        UserResDTO userResDTO = convertUser2UserResDTO(user);
+
+        return userResDTO;
     }
 
     public void handleDeleteUser(Long id) {
@@ -71,5 +83,32 @@ public class UserService {
 
     public User handleGetUserByUsername(String username) {
         return this.userRepository.findByEmail(username);
+    }
+
+    public boolean isEmailExist(@Valid UserReqDTO userReqDTO) {
+        return this.userRepository.existsByEmail(userReqDTO.getEmail());
+    }
+
+    public UserResDTO convertUser2UserResDTO (User user) {
+        UserResDTO userResDTO = new UserResDTO();
+        userResDTO.setId(user.getId());
+        userResDTO.setFullName(user.getFullName());
+        userResDTO.setEmail(user.getEmail());
+        userResDTO.setAge(user.getAge());
+        userResDTO.setGender(user.getGender());
+        userResDTO.setAddress(user.getAddress());
+        userResDTO.setCreatedAt(user.getCreatedAt());
+        return userResDTO;
+    }
+
+    public User convertUserReqDTO2User (UserReqDTO userReqDTO) {
+        User user = new User();
+        user.setFullName(userReqDTO.getFullName());
+        user.setEmail(userReqDTO.getEmail());
+        user.setPassword(userReqDTO.getPassword());
+        user.setAge(userReqDTO.getAge());
+        user.setGender(userReqDTO.getGender());
+        user.setAddress(userReqDTO.getAddress());
+        return user;
     }
 }

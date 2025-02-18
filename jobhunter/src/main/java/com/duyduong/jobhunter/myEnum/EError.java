@@ -1,0 +1,8 @@
+package com.duyduong.jobhunter.myEnum;
+
+public class EError {
+    public static final String FORMAT_INVALID = "FORMAT_INVALID";
+    public static final String NOT_NULL_OR_EMPTY = "NOT_NULL_OR_EMPTY";
+    public static final String NOT_NULL = "NOT_NULL";
+
+}

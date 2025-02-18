@@ -1,11 +1,11 @@
 package com.duyduong.jobhunter.domain;
 
 import com.duyduong.jobhunter.myEnum.GenderEnum;
+import com.duyduong.jobhunter.util.SecurityUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 
@@ -14,32 +14,53 @@ import java.time.Instant;
 @Getter
 @Setter
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    private String fullName;
+    String fullName;
 
-    private String email;
+    String email;
 
-    private String password;
+    String password;
 
-    private int age;
+    int age;
 
     @Enumerated(EnumType.STRING)
-    private GenderEnum gender;
+    GenderEnum gender;
 
-    private String address;
+    String address;
 
-    private String refreshToken;
+    String refreshToken;
 
-    private Instant createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    Instant createdAt;
 
-    private Instant updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    Instant updatedAt;
 
-    private String createdBy;
+    String createdBy;
 
-    private String updatedBy;
+    String updatedBy;
+
+    @PrePersist
+    public void handleBeforeCreate() {
+        this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() == true
+                ? SecurityUtil.getCurrentUserLogin().get()
+                : "";
+
+        this.createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handleBeforUpdate() {
+        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() == true
+                ? SecurityUtil.getCurrentUserLogin().get()
+                : "";
+
+        this.updatedAt = Instant.now();
+    }
 }

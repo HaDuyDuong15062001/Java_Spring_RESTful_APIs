@@ -2,20 +2,19 @@ package com.duyduong.jobhunter.controller;
 
 import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
+import com.duyduong.jobhunter.domain.dto.request.UserReqDTO;
+import com.duyduong.jobhunter.domain.dto.response.UserResDTO;
 import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.util.annotation.ApiMessage;
 import com.duyduong.jobhunter.util.error.IdInvalidException;
 import com.turkraft.springfilter.boot.Filter;
-import org.springframework.data.domain.PageRequest;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -31,11 +30,17 @@ public class UserController {
 
     @ApiMessage("Create new user")
     @PostMapping
-    public ResponseEntity<User> createNewUserPostMethod(@RequestBody User userPost) {
-        String hashPassword = this.passwordEncoder.encode(userPost.getPassword());
-        userPost.setPassword(hashPassword);
-        User newUser = this.userService.handleCreateUser(userPost);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    public ResponseEntity<UserResDTO> createNewUserPostMethod(@Valid @RequestBody UserReqDTO userReqDTO)
+            throws IdInvalidException {
+        boolean isEmailExist = this.userService.isEmailExist(userReqDTO);
+        if (isEmailExist) {
+            throw new IdInvalidException(
+                    "Email " + userReqDTO.getEmail() + " đã tồn tại. Vui lòng sử dụng email khác!");
+        }
+        String hashPassword = this.passwordEncoder.encode(userReqDTO.getPassword());
+        userReqDTO.setPassword(hashPassword);
+        UserResDTO userResDTO = this.userService.handleCreateUser(userReqDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResDTO);
     }
 
     @ApiMessage("Get user by id")
