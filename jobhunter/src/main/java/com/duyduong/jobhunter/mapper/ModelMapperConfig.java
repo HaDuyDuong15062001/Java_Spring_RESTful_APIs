@@ -11,10 +11,7 @@ public class ModelMapperConfig {
     @Bean
     public ModelMapper mapper() {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STANDARD)
-                .setPropertyCondition(Conditions.isSourcePropertyNull())
-                .setSkipNullEnabled(true);
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
         return modelMapper;
     }
 }

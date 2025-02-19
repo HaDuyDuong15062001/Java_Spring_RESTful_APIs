@@ -27,14 +27,17 @@ public class UserService {
 
     private final ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper) {
+    private final ModelMapper userMapper;
+
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, ModelMapper userModelMapper) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.userMapper = userModelMapper;
     }
 
     public UserResDTOCreate handleCreateUser(UserReqDTOCreate userReqDTOCreate) {
 
-        User user = this.modelMapper.map(userReqDTOCreate, User.class);
+        User user = this.userMapper.map(userReqDTOCreate, User.class);
         this.userRepository.save(user);
         UserResDTOCreate userResDTOCreate = this.modelMapper.map(user, UserResDTOCreate.class);
 
@@ -73,7 +76,7 @@ public class UserService {
 
     public UserResDTOUpdate handleUpdateUser(UserReqDTOUpdate userReqDTOUpdate) {
 
-        User user = this.modelMapper.map(userReqDTOUpdate, User.class);
+        User user = this.userMapper.map(userReqDTOUpdate, User.class);
         this.userRepository.save(user);
         UserResDTOUpdate UserResDTOUpdate  = this.modelMapper.map(user, UserResDTOUpdate.class);
 
