@@ -79,7 +79,7 @@ public class UserService {
     public UserResDTOUpdate handleUpdateUser(UserReqDTOUpdate userReqDTOUpdate) {
 
         User user = this.userMapper.map(userReqDTOUpdate, User.class);
-        //this.userRepository.save(user);
+        this.userRepository.save(user);
         UserResDTOUpdate UserResDTOUpdate  = this.mapper.map(user, UserResDTOUpdate.class);
 
         return UserResDTOUpdate;
