@@ -31,7 +31,7 @@ public class UserMapperConfig {
         PropertyMap<?, ?> convertUserReqDTOUpdate2User = new PropertyMap<UserReqDTOUpdate, User>() {
             @Override
             protected void configure() {
-                skip(destination.getId()); // ID thường được sinh bởi database
+                //skip(destination.getId()); // ID thường được sinh bởi database
                 skip(destination.getEmail());
                 skip(destination.getPassword());
                 skip(destination.getRefreshToken()); // Không cần nhận refresh token từ request create

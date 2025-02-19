@@ -12,6 +12,7 @@ import com.duyduong.jobhunter.domain.dto.response.UserResDTOUpdate;
 import com.duyduong.jobhunter.repository.UserRepository;
 import com.duyduong.jobhunter.util.error.JobHunterException;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,25 +22,26 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
 
-    private final ModelMapper modelMapper;
+    private final ModelMapper mapper;
 
     private final ModelMapper userMapper;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, ModelMapper userModelMapper) {
-        this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
-        this.userMapper = userModelMapper;
-    }
+//    public UserService(UserRepository userRepository, ModelMapper mapper, ModelMapper userModelMapper) {
+//        this.userRepository = userRepository;
+//        this.mapper = mapper;
+//        this.userMapper = userModelMapper;
+//    }
 
     public UserResDTOCreate handleCreateUser(UserReqDTOCreate userReqDTOCreate) {
 
         User user = this.userMapper.map(userReqDTOCreate, User.class);
         this.userRepository.save(user);
-        UserResDTOCreate userResDTOCreate = this.modelMapper.map(user, UserResDTOCreate.class);
+        UserResDTOCreate userResDTOCreate = this.mapper.map(user, UserResDTOCreate.class);
 
         return userResDTOCreate;
     }
@@ -77,8 +79,8 @@ public class UserService {
     public UserResDTOUpdate handleUpdateUser(UserReqDTOUpdate userReqDTOUpdate) {
 
         User user = this.userMapper.map(userReqDTOUpdate, User.class);
-        this.userRepository.save(user);
-        UserResDTOUpdate UserResDTOUpdate  = this.modelMapper.map(user, UserResDTOUpdate.class);
+        //this.userRepository.save(user);
+        UserResDTOUpdate UserResDTOUpdate  = this.mapper.map(user, UserResDTOUpdate.class);
 
         return UserResDTOUpdate;
     }
