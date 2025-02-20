@@ -23,3 +23,4 @@ public class JobhunterApplication {
 //https://viblo.asia/p/huong-dan-spring-security-co-ban-de-hieu-OeVKBdedlkW
 //https://techmaster.vn/posts/36295/spring-security-ban-sau-ve-authentication-va-authorization-p1
 //https://techmaster.vn/posts/37937/tim-hieu-ve-bean-trong-springboot
+// push force
