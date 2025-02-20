@@ -8,6 +8,7 @@ import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOCreate;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOCreate;
+import com.duyduong.jobhunter.domain.dto.response.UserResDTOFindById;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOUpdate;
 import com.duyduong.jobhunter.repository.UserRepository;
 import com.duyduong.jobhunter.util.error.IdInvalidException;
@@ -45,11 +46,11 @@ public class UserService {
 
         boolean emailIsExist = this.userRepository.existsByEmail(userReqDTOCreate.getEmail());
         if (emailIsExist) {
-            throw new IdInvalidException(JobHunterError.EMAIL_EXISTED);
+            throw new JobHunterException(JobHunterError.EMAIL_EXISTED);
         }
         String hashPassword = this.passwordEncoder.encode(userReqDTOCreate.getPassword());
         userReqDTOCreate.setPassword(hashPassword);
-        User user = this.userMapper.map(userReqDTOCreate, User.class);
+        User user = this.mapper.map(userReqDTOCreate, User.class);
         this.userRepository.save(user);
         UserResDTOCreate userResDTOCreate = this.mapper.map(user, UserResDTOCreate.class);
 
@@ -63,11 +64,12 @@ public class UserService {
         this.userRepository.deleteById(id);
     }
 
-    public User handleFindUserById(Long id) {
+    public UserResDTOFindById handleFindUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new JobHunterException(JobHunterError.USER_ID_NOT_FOUND, List.of(id))
         );
-        return user;
+        UserResDTOFindById userResDTOFindById = this.mapper.map(user, UserResDTOFindById.class);
+        return userResDTOFindById;
     }
 
     public ResultPaginationDTO handleFindAllUser(Specification<User> specification, Pageable pageable) {

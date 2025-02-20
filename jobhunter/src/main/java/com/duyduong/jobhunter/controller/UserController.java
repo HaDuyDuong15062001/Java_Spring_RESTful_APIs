@@ -6,6 +6,7 @@ import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOCreate;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOCreate;
+import com.duyduong.jobhunter.domain.dto.response.UserResDTOFindById;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOUpdate;
 import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.util.annotation.ApiMessage;
@@ -43,8 +44,8 @@ public class UserController {
 
     @ApiMessage("Get user by id")
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-        User user = this.userService.handleFindUserById(id);
+    public ResponseEntity<UserResDTOFindById> getUserById(@PathVariable("id") Long id) {
+        UserResDTOFindById user = this.userService.handleFindUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
