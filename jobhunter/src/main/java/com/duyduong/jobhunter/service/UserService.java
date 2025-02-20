@@ -10,6 +10,7 @@ import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOCreate;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOUpdate;
 import com.duyduong.jobhunter.repository.UserRepository;
+import com.duyduong.jobhunter.util.error.IdInvalidException;
 import com.duyduong.jobhunter.util.error.JobHunterException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,14 +33,22 @@ public class UserService {
 
     private final ModelMapper userMapper;
 
+    private final PasswordEncoder passwordEncoder;
+
 //    public UserService(UserRepository userRepository, ModelMapper mapper, ModelMapper userModelMapper) {
 //        this.userRepository = userRepository;
 //        this.mapper = mapper;
 //        this.userMapper = userModelMapper;
 //    }
 
-    public UserResDTOCreate handleCreateUser(UserReqDTOCreate userReqDTOCreate) {
+    public UserResDTOCreate handleCreateUser(UserReqDTOCreate userReqDTOCreate) throws IdInvalidException {
 
+        boolean emailIsExist = this.userRepository.existsByEmail(userReqDTOCreate.getEmail());
+        if (emailIsExist) {
+            throw new IdInvalidException(JobHunterError.EMAIL_EXISTED);
+        }
+        String hashPassword = this.passwordEncoder.encode(userReqDTOCreate.getPassword());
+        userReqDTOCreate.setPassword(hashPassword);
         User user = this.userMapper.map(userReqDTOCreate, User.class);
         this.userRepository.save(user);
         UserResDTOCreate userResDTOCreate = this.mapper.map(user, UserResDTOCreate.class);
@@ -78,8 +88,11 @@ public class UserService {
 
     public UserResDTOUpdate handleUpdateUser(UserReqDTOUpdate userReqDTOUpdate) {
 
-        User user = this.userMapper.map(userReqDTOUpdate, User.class);
-        //this.userRepository.save(user);
+        User user = this.userRepository.findById(userReqDTOUpdate.getId()).orElseThrow(
+                () -> new JobHunterException(JobHunterError.USER_ID_NOT_FOUND, List.of(userReqDTOUpdate.getId()))
+        );
+        this.userMapper.map(userReqDTOUpdate, user);
+        this.userRepository.save(user);
         UserResDTOUpdate UserResDTOUpdate  = this.mapper.map(user, UserResDTOUpdate.class);
 
         return UserResDTOUpdate;

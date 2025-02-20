@@ -1,4 +1,4 @@
-package com.duyduong.jobhunter.myEnum;
+package com.duyduong.jobhunter.constant.myEnum;
 
 public class EError {
     public static final String FORMAT_INVALID = "FORMAT_INVALID";

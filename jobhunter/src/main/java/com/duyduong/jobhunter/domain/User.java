@@ -1,6 +1,6 @@
 package com.duyduong.jobhunter.domain;
 
-import com.duyduong.jobhunter.myEnum.GenderEnum;
+import com.duyduong.jobhunter.constant.myEnum.GenderEnum;
 import com.duyduong.jobhunter.util.SecurityUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

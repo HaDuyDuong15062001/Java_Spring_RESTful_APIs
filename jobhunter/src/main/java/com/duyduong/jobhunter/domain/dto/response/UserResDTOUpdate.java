@@ -1,11 +1,6 @@
 package com.duyduong.jobhunter.domain.dto.response;
 
-import com.duyduong.jobhunter.myEnum.EError;
-import com.duyduong.jobhunter.myEnum.GenderEnum;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.duyduong.jobhunter.constant.myEnum.GenderEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
