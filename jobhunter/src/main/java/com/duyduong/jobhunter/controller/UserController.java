@@ -35,7 +35,8 @@ public class UserController {
 
     @ApiMessage("Create new user")
     @PostMapping
-    public ResponseEntity<UserResDTOCreate> createNewUserPostMethod(@Valid @RequestBody UserReqDTOCreate userReqDTOCreate) throws IdInvalidException {
+    public ResponseEntity<UserResDTOCreate> createNewUserPostMethod(@Valid @RequestBody UserReqDTOCreate userReqDTOCreate)
+            throws IdInvalidException {
         UserResDTOCreate userResDTOCreate = this.userService.handleCreateUser(userReqDTOCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResDTOCreate);
     }
