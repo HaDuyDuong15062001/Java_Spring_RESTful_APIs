@@ -13,7 +13,7 @@ import java.time.Instant;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResDTOUpdate {
 
-    Long Id;
+    Long id;
 
     String fullName;
 

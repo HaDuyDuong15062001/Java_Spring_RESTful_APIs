@@ -17,7 +17,7 @@ import lombok.experimental.FieldDefaults;
 public class UserReqDTOUpdate {
 
     @NotNull(message = "Id " + EError.NOT_NULL)
-    Long Id;
+    Long id;
 
     @NotBlank(message = "fullname " + EError.NOT_NULL_OR_EMPTY)
     String fullName;
