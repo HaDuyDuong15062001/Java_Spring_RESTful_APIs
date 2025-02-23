@@ -1,13 +1,26 @@
 package com.duyduong.jobhunter.domain.dto;
 
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ResLoginDTO {
-    private String acccToken;
 
-    public String getAcccToken() {
-        return acccToken;
-    }
+    String acccToken;
+    UserLogin userLogin;
 
-    public void setAcccToken(String acccToken) {
-        this.acccToken = acccToken;
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public static class UserLogin {
+        long Id;
+        String email;
+        String fullName;
     }
 }

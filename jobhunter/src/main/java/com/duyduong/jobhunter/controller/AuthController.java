@@ -1,7 +1,9 @@
 package com.duyduong.jobhunter.controller;
 
+import com.duyduong.jobhunter.domain.User;
 import com.duyduong.jobhunter.domain.dto.LoginDTO;
 import com.duyduong.jobhunter.domain.dto.ResLoginDTO;
+import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.util.SecurityUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1")
+
 public class AuthController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final SecurityUtil securityUtil;
-    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil) {
+    private final UserService userService;
+
+    public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil, UserService userService) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.securityUtil = securityUtil;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -38,6 +44,16 @@ public class AuthController {
         String accessToken = this.securityUtil.createToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         ResLoginDTO res = new ResLoginDTO();
+
+        User currentUserDB = this.userService.handleGetUserByUsername(loginDTO.getUsername());
+        if (currentUserDB != null) {
+            ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
+                    currentUserDB.getId(),
+                    currentUserDB.getEmail(),
+                    currentUserDB.getFullName());
+            res.setUserLogin(userLogin);
+        }
+
         res.setAcccToken(accessToken);
         return ResponseEntity.ok().body(res);
     }
