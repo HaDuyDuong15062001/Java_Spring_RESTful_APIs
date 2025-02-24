@@ -32,7 +32,8 @@ logging:
 duyduong:
   jwt:
     base64-secret: 74tF1lZAeDEkC7u6XOP+vbDMhX20/geTTrOCGNO96gkoBAo5hk4M4RQ6bbP63MjmrhB3p2lsFJnrzlfFl/potw==
-    token-validity-in-seconds: 8640000
+    access-token-validity-in-seconds: 8640000
+    refresh-token-validity-in-seconds: 8640000
 
 
 

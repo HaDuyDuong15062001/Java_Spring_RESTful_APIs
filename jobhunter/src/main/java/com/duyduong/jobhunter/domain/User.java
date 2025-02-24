@@ -34,6 +34,7 @@ public class User {
 
     String address;
 
+    @Column(columnDefinition = "MEDIUMTEXT")
     String refreshToken;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
