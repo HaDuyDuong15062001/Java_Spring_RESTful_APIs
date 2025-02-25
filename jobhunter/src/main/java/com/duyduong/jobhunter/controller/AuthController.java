@@ -7,9 +7,6 @@ import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.util.SecurityUtil;
 import com.duyduong.jobhunter.util.annotation.ApiMessage;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -18,7 +15,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
+import static com.duyduong.jobhunter.util.SecurityUtil.JWT_ALGORITHM;
 
 @RestController
 @RequestMapping("api/v1")
@@ -29,14 +35,18 @@ public class AuthController {
     private final SecurityUtil securityUtil;
     private final UserService userService;
 
+    private final JwtEncoder jwtEncoder;
+
+    
     @Value("${duyduong.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
 
     public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil,
-                          UserService userService) {
+                          UserService userService, JwtEncoder jwtEncoder) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.securityUtil = securityUtil;
         this.userService = userService;
+        this.jwtEncoder = jwtEncoder;
     }
 
 
@@ -48,7 +58,6 @@ public class AuthController {
 
         //xác thực người dùng => cần viết hàm loadUserByUsername
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         ResLoginDTO res = new ResLoginDTO();
@@ -89,9 +98,7 @@ public class AuthController {
     @GetMapping("/auth/account")
     @ApiMessage("Fetch account")
     public  ResponseEntity<ResLoginDTO.UserLogin> getAccount() {
-        String email = SecurityUtil.getCurrentUserLogin().isPresent() ?
-        SecurityUtil.getCurrentUserLogin().get() : "";
-
+        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         User currentUserDB = this.userService.handleGetUserByUsername(email);
         ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin();
         if (currentUserDB != null) {
@@ -101,4 +108,6 @@ public class AuthController {
         }
         return ResponseEntity.ok().body(userLogin);
     }
+
+
 }

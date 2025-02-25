@@ -75,8 +75,6 @@ public class SecurityConfiguration {
         return jwtAuthenticationConverter;
     }
 
-
-
     @Bean
     public JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(

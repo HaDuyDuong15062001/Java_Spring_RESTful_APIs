@@ -36,12 +36,6 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-//    public UserService(UserRepository userRepository, ModelMapper mapper, ModelMapper userModelMapper) {
-//        this.userRepository = userRepository;
-//        this.mapper = mapper;
-//        this.userMapper = userModelMapper;
-//    }
-
     public UserResDTOCreate handleCreateUser(UserReqDTOCreate userReqDTOCreate) throws IdInvalidException {
 
         boolean emailIsExist = this.userRepository.existsByEmail(userReqDTOCreate.getEmail());
