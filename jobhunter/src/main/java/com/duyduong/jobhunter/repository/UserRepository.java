@@ -12,7 +12,8 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     boolean existsByEmail(String email);
 
-
     @Override
     boolean existsById(Long id);
+
+    User findByRefreshTokenAndEmail(String token, String email);
 }

@@ -2,6 +2,7 @@ package com.duyduong.jobhunter.util;
 
 
 import com.duyduong.jobhunter.domain.dto.ResLoginDTO;
+import com.nimbusds.jose.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -10,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.*;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -34,15 +38,21 @@ public class SecurityUtil {
     @Value("${duyduong.jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpiration;
 
-    public String createAccessToken(Authentication authentication, ResLoginDTO.UserLogin dto) {
+    public String createAccessToken(String email, ResLoginDTO.UserLogin dto) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
+
+        List<String> listAuthority = new ArrayList<String>();
+        listAuthority.add("ROLE_USER_CREATE");
+        listAuthority.add("ROLE_USER_UPDATE");
+
         // @formatter:off
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
-                .subject(authentication.getName())
+                .subject(email)
                 .claim("user", dto)
+                .claim("permission", listAuthority)
                 .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
@@ -62,6 +72,24 @@ public class SecurityUtil {
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+    }
+
+    private SecretKey getSecretKey() {
+        byte[] keyBytes = Base64.from(jwtKey).decode();
+        return new SecretKeySpec(keyBytes, 0, keyBytes.length,
+                JWT_ALGORITHM.getName());
+    }
+
+    public Jwt checkValidRrfreshToken(String token) {
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(
+                getSecretKey()).macAlgorithm(SecurityUtil.JWT_ALGORITHM).build();
+        try {
+            return jwtDecoder.decode(token);
+            //System.out.println(">>> Refresh token is valid");
+        } catch (Exception e) {
+            System.out.println(">>> Refresh token error: " + e.getMessage());
+            throw e;
+        }
     }
 
     /**
