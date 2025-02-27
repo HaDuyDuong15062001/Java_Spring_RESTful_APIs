@@ -17,7 +17,7 @@ public class UserResDTOFindById {
 
     Long id;
 
-    String fullName;
+    String name;
 
     String email;
 

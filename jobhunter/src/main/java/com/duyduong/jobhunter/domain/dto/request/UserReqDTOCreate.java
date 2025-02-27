@@ -18,7 +18,7 @@ import lombok.experimental.FieldDefaults;
 public class UserReqDTOCreate {
 
     @NotBlank(message = EError.NOT_NULL_OR_EMPTY)
-    String fullName;
+    String name;
 
     @NotBlank(message = EError.NOT_NULL_OR_EMPTY)
     String email;

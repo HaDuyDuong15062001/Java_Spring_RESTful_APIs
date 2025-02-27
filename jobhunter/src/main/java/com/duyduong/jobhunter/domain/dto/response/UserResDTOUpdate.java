@@ -15,7 +15,7 @@ public class UserResDTOUpdate {
 
     Long id;
 
-    String fullName;
+    String name;
 
     GenderEnum gender;
 

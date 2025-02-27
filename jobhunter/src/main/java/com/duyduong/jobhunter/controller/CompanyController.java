@@ -61,8 +61,8 @@ public class CompanyController {
 
     @ApiMessage("Delete company by id")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCompanyById(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteCompanyById(@PathVariable("id") Long id) {
         this.companyService.handleDeleteCompany(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Id " + id + " is deleted");
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

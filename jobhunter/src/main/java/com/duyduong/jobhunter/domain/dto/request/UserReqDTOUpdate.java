@@ -19,8 +19,8 @@ public class UserReqDTOUpdate {
     @NotNull(message = "Id " + EError.NOT_NULL)
     Long id;
 
-    @NotBlank(message = "fullname " + EError.NOT_NULL_OR_EMPTY)
-    String fullName;
+    @NotBlank(message = "name " + EError.NOT_NULL_OR_EMPTY)
+    String name;
 
     @NotNull(message = "gender " + EError.NOT_NULL)
     @Enumerated(EnumType.STRING)

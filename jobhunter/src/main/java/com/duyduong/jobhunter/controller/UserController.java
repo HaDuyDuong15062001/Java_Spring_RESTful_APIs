@@ -59,9 +59,9 @@ public class UserController {
 
     @ApiMessage("Delete user by id")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
         this.userService.handleDeleteUser(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Id " + id + " is deleted");
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @ApiMessage("Update user")

@@ -17,7 +17,7 @@ public class UserResDTOCreate {
 
     Long id;
 
-    String fullName;
+    String name;
 
     String email;
 
