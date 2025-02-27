@@ -9,6 +9,7 @@ import lombok.Setter;
 
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "companies")
@@ -40,6 +41,9 @@ public class Company {
     private String updatedBy;
 
     private String logo;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    List<User> users;
 
     @PrePersist
     public void handleBeforeCreate() {
