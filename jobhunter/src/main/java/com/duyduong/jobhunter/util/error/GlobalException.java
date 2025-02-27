@@ -2,7 +2,6 @@ package com.duyduong.jobhunter.util.error;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.hibernate.dialect.HANADialect;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.duyduong.jobhunter.domain.RestResponse;
+import com.duyduong.jobhunter.domain.dto.response.RestResponse;
 
 @RestControllerAdvice
 public class GlobalException {

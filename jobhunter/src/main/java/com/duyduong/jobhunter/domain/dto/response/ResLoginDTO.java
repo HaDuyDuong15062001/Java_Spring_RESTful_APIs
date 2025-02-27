@@ -1,4 +1,4 @@
-package com.duyduong.jobhunter.domain.dto;
+package com.duyduong.jobhunter.domain.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

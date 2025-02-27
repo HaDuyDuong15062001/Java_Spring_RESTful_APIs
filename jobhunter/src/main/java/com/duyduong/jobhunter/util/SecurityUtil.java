@@ -1,7 +1,7 @@
 package com.duyduong.jobhunter.util;
 
 
-import com.duyduong.jobhunter.domain.dto.ResLoginDTO;
+import com.duyduong.jobhunter.domain.dto.response.ResLoginDTO;
 import com.nimbusds.jose.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;

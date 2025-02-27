@@ -1,12 +1,11 @@
 package com.duyduong.jobhunter.controller;
 
-import com.duyduong.jobhunter.domain.User;
-import com.duyduong.jobhunter.domain.dto.LoginDTO;
-import com.duyduong.jobhunter.domain.dto.ResLoginDTO;
+import com.duyduong.jobhunter.domain.user.User;
+import com.duyduong.jobhunter.domain.dto.request.RequestLoginDTO;
+import com.duyduong.jobhunter.domain.dto.response.ResLoginDTO;
 import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.util.SecurityUtil;
 import com.duyduong.jobhunter.util.annotation.ApiMessage;
-import com.duyduong.jobhunter.util.error.IdInvalidException;
 import com.duyduong.jobhunter.util.error.JobHunterException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,11 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-
-import static com.duyduong.jobhunter.util.SecurityUtil.JWT_ALGORITHM;
 
 @RestController
 @RequestMapping("api/v1")
@@ -50,10 +44,10 @@ public class AuthController {
 
 
     @PostMapping("/auth/login")
-    public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody RequestLoginDTO requestLoginDTO) {
         //Nạp input gồm username/password vào Security
         UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword());
+                = new UsernamePasswordAuthenticationToken(requestLoginDTO.getUsername(), requestLoginDTO.getPassword());
 
         //xác thực người dùng => cần viết hàm loadUserByUsername
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -62,7 +56,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         ResLoginDTO res = new ResLoginDTO();
-        User currentUserDB = this.userService.handleGetUserByUsername(loginDTO.getUsername());
+        User currentUserDB = this.userService.handleGetUserByUsername(requestLoginDTO.getUsername());
         if (currentUserDB != null) {
             ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
                     currentUserDB.getId(),
@@ -76,10 +70,10 @@ public class AuthController {
 
         // create refresh token
         res.setAcccToken(accessToken);
-        String refreshToken = this.securityUtil.createRefreshToken(loginDTO.getUsername(), res);
+        String refreshToken = this.securityUtil.createRefreshToken(requestLoginDTO.getUsername(), res);
 
         // update user
-        this.userService.updateUserTolken(refreshToken, loginDTO.getUsername());
+        this.userService.updateUserTolken(refreshToken, requestLoginDTO.getUsername());
 
         // create cookies
         ResponseCookie responseCookie = ResponseCookie.from("refresh_token",refreshToken)

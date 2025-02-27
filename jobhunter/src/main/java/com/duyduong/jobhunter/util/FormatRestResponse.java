@@ -1,9 +1,8 @@
 package com.duyduong.jobhunter.util;
 
 
-import com.duyduong.jobhunter.domain.RestResponse;
+import com.duyduong.jobhunter.domain.dto.response.RestResponse;
 import com.duyduong.jobhunter.util.annotation.ApiMessage;
-import com.sun.net.httpserver.HttpsServer;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

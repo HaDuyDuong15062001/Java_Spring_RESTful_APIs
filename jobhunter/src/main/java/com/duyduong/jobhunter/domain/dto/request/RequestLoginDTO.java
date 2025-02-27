@@ -1,8 +1,8 @@
-package com.duyduong.jobhunter.domain.dto;
+package com.duyduong.jobhunter.domain.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginDTO {
+public class RequestLoginDTO {
     @NotBlank(message = "username không được để trống")
     private String username;
     @NotBlank(message = "password không được để trống")

@@ -2,9 +2,8 @@ package com.duyduong.jobhunter.service;
 
 import com.duyduong.jobhunter.constant.JobHunterError;
 
-import com.duyduong.jobhunter.domain.User;
-import com.duyduong.jobhunter.domain.dto.MetaDTO;
-import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
+import com.duyduong.jobhunter.domain.user.User;
+import com.duyduong.jobhunter.domain.dto.response.ResultPaginationDTO;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOCreate;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOCreate;
@@ -13,7 +12,6 @@ import com.duyduong.jobhunter.domain.dto.response.UserResDTOUpdate;
 import com.duyduong.jobhunter.repository.UserRepository;
 import com.duyduong.jobhunter.util.error.IdInvalidException;
 import com.duyduong.jobhunter.util.error.JobHunterException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -69,7 +67,7 @@ public class UserService {
     public ResultPaginationDTO handleFindAllUser(Specification<User> specification, Pageable pageable) {
         Page<User> userPage = this.userRepository.findAll(specification, pageable);
         ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
-        MetaDTO meta = new MetaDTO();
+        ResultPaginationDTO.MetaDTO meta = new ResultPaginationDTO.MetaDTO();
 
         meta.setPage(userPage.getNumber() + 1);
         meta.setPageSize(userPage.getSize());

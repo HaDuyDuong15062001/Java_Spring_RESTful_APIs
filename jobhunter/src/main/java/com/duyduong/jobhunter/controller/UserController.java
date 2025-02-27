@@ -1,8 +1,7 @@
 package com.duyduong.jobhunter.controller;
 
-import com.duyduong.jobhunter.constant.JobHunterError;
-import com.duyduong.jobhunter.domain.User;
-import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
+import com.duyduong.jobhunter.domain.user.User;
+import com.duyduong.jobhunter.domain.dto.response.ResultPaginationDTO;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOCreate;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOCreate;
@@ -11,17 +10,13 @@ import com.duyduong.jobhunter.domain.dto.response.UserResDTOUpdate;
 import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.util.annotation.ApiMessage;
 import com.duyduong.jobhunter.util.error.IdInvalidException;
-import com.duyduong.jobhunter.util.error.JobHunterException;
 import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/users")

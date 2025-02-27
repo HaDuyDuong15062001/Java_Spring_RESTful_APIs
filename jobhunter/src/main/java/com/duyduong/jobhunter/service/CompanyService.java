@@ -1,20 +1,17 @@
 package com.duyduong.jobhunter.service;
 
 import com.duyduong.jobhunter.constant.JobHunterError;
-import com.duyduong.jobhunter.domain.Company;
-import com.duyduong.jobhunter.domain.dto.MetaDTO;
-import com.duyduong.jobhunter.domain.dto.ResultPaginationDTO;
+import com.duyduong.jobhunter.domain.user.Company;
+import com.duyduong.jobhunter.domain.dto.response.ResultPaginationDTO;
 import com.duyduong.jobhunter.repository.CompanyRespository;
 import com.duyduong.jobhunter.util.error.JobHunterException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CompanyService {
@@ -31,7 +28,7 @@ public class CompanyService {
     public ResultPaginationDTO handleGetAllCompany(Specification specification, Pageable pageable) {
         Page<Company> companyPage = this.companyRespository.findAll(specification, pageable);
         ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
-        MetaDTO meta = new MetaDTO();
+        ResultPaginationDTO.MetaDTO meta = new ResultPaginationDTO.MetaDTO();
 
         meta.setPage(pageable.getPageNumber() + 1);
         meta.setPageSize(pageable.getPageSize());

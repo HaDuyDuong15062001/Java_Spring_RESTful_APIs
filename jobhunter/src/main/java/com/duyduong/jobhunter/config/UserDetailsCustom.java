@@ -1,5 +1,6 @@
-package com.duyduong.jobhunter.service;
+package com.duyduong.jobhunter.config;
 
+import com.duyduong.jobhunter.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +20,7 @@ public class UserDetailsCustom implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.duyduong.jobhunter.domain.User user = this.userService.handleGetUserByUsername(username);
+        com.duyduong.jobhunter.domain.user.User user = this.userService.handleGetUserByUsername(username);
         return new User(
                 user.getEmail(),
                 user.getPassword(),

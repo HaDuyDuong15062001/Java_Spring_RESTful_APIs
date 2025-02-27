@@ -1,7 +1,6 @@
 package com.duyduong.jobhunter.mapper;
 
-import com.duyduong.jobhunter.domain.User;
-import com.duyduong.jobhunter.domain.dto.request.UserReqDTOCreate;
+import com.duyduong.jobhunter.domain.user.User;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;

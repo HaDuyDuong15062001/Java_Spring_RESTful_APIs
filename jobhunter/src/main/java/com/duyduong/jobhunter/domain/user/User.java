@@ -1,46 +1,51 @@
-package com.duyduong.jobhunter.domain;
+package com.duyduong.jobhunter.domain.user;
 
+import com.duyduong.jobhunter.constant.myEnum.GenderEnum;
 import com.duyduong.jobhunter.util.SecurityUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 
 @Entity
-@Table(name = "companies")
+@Table(name = "users")
 @Getter
 @Setter
-@RequiredArgsConstructor
-public class Company {
-
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    @NotBlank(message = "name không thể để trống!!!")
-    private String name;
+    String name;
+
+    String email;
+
+    String password;
+
+    int age;
+
+    @Enumerated(EnumType.STRING)
+    GenderEnum gender;
+
+    String address;
 
     @Column(columnDefinition = "MEDIUMTEXT")
-    private String description;
+    String refreshToken;
 
-    private String address;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    Instant createdAt;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
-    private Instant createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    Instant updatedAt;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
-    private Instant updatedAt;
+    String createdBy;
 
-    private String createdBy;
-
-    private String updatedBy;
-
-    private String logo;
+    String updatedBy;
 
     @PrePersist
     public void handleBeforeCreate() {
