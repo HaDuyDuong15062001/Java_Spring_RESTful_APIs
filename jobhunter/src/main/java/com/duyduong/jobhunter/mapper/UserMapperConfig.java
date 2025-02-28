@@ -15,19 +15,7 @@ public class UserMapperConfig {
     public ModelMapper userMapper() {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
-//        PropertyMap<?, ?> map1 = new PropertyMap<UserReqDTOCreate, User>() {
-//            @Override
-//            protected void configure() {
-//                skip(destination.getId()); // ID thường được sinh bởi database
-//                skip(destination.getRefreshToken()); // Không cần nhận refresh token từ request create
-//                skip(destination.getCreatedAt()); // Các trường thời gian nên được xử lý ở backend
-//                skip(destination.getUpdatedAt());
-//                skip(destination.getCreatedBy());
-//                skip(destination.getUpdatedBy());
-//            }
-//        };
-
-        PropertyMap<?, ?> map2 = new PropertyMap<UserReqDTOUpdate, User>() {
+        PropertyMap<?, ?> map1 = new PropertyMap<UserReqDTOUpdate, User>() {
             @Override
             protected void configure() {
                 //skip(destination.getId()); // ID thường được sinh bởi database
@@ -40,8 +28,7 @@ public class UserMapperConfig {
                 skip(destination.getUpdatedBy());
             }
         };
-       // mapper.addMappings(map1);
-        mapper.addMappings(map2);
+        mapper.addMappings(map1);
         return mapper;
     }
 }

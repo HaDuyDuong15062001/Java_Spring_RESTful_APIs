@@ -2,6 +2,7 @@ package com.duyduong.jobhunter.service;
 
 import com.duyduong.jobhunter.constant.JobHunterError;
 
+import com.duyduong.jobhunter.domain.user.Company;
 import com.duyduong.jobhunter.domain.user.User;
 import com.duyduong.jobhunter.domain.dto.response.ResultPaginationDTO;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOCreate;
@@ -9,8 +10,8 @@ import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOCreate;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOFindById;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOUpdate;
+import com.duyduong.jobhunter.repository.CompanyRespository;
 import com.duyduong.jobhunter.repository.UserRepository;
-import com.duyduong.jobhunter.util.error.IdInvalidException;
 import com.duyduong.jobhunter.util.error.JobHunterException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,18 +36,30 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserResDTOCreate handleCreateUser(UserReqDTOCreate userReqDTOCreate) throws IdInvalidException {
+    private final CompanyRespository companyRespository;
+
+    public UserResDTOCreate handleCreateUser(UserReqDTOCreate userReqDTOCreate) {
 
         boolean emailIsExist = this.userRepository.existsByEmail(userReqDTOCreate.getEmail());
         if (emailIsExist) {
             throw new JobHunterException(JobHunterError.EMAIL_EXISTED);
         }
+
+        boolean IdCompany = this.companyRespository.existsById(userReqDTOCreate.getCompany().getId());
+        if (!IdCompany) {
+            throw new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND);
+        }
+        Optional<Company> company = this.companyRespository.findById(userReqDTOCreate.getCompany().getId());
+        UserResDTOCreate.CompanyUser companyUser = new UserResDTOCreate.CompanyUser();
         String hashPassword = this.passwordEncoder.encode(userReqDTOCreate.getPassword());
         userReqDTOCreate.setPassword(hashPassword);
         User user = this.mapper.map(userReqDTOCreate, User.class);
         this.userRepository.save(user);
         UserResDTOCreate userResDTOCreate = this.mapper.map(user, UserResDTOCreate.class);
 
+        companyUser.setId(company.get().getId());
+        companyUser.setName(company.get().getName());
+        userResDTOCreate.setCompanyUser(companyUser);
         return userResDTOCreate;
     }
 

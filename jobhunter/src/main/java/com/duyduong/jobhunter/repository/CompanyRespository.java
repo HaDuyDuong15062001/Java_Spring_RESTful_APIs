@@ -6,5 +6,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CompanyRespository extends JpaRepository<Company, Long>, JpaSpecificationExecutor<Company> {
+public interface CompanyRespository extends
+        JpaRepository<Company, Long>, JpaSpecificationExecutor<Company> {
+    boolean existsById(Long Id);
 }
