@@ -1,6 +1,7 @@
 package com.duyduong.jobhunter.domain.dto.response;
 
 import com.duyduong.jobhunter.constant.myEnum.GenderEnum;
+import com.duyduong.jobhunter.domain.entity.CompanyOfUser;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,9 +29,11 @@ public class UserResDTOFindById {
 
     String address;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     Instant createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     Instant updatedAt;
+
+    CompanyOfUser company;
 }

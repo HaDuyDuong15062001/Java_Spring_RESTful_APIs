@@ -1,4 +1,4 @@
-package com.duyduong.jobhunter.domain.user;
+package com.duyduong.jobhunter.domain.entity;
 
 import com.duyduong.jobhunter.constant.myEnum.GenderEnum;
 import com.duyduong.jobhunter.util.SecurityUtil;

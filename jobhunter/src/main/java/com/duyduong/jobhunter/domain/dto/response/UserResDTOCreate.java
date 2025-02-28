@@ -1,7 +1,7 @@
 package com.duyduong.jobhunter.domain.dto.response;
 
 import com.duyduong.jobhunter.constant.myEnum.GenderEnum;
-import com.duyduong.jobhunter.domain.user.Company;
+import com.duyduong.jobhunter.domain.entity.CompanyOfUser;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
@@ -31,15 +31,6 @@ public class UserResDTOCreate {
 
     Instant createdAt;
 
-    CompanyUser companyUser;
+    CompanyOfUser company;
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @FieldDefaults(level = AccessLevel.PRIVATE)
-    public static class CompanyUser {
-        Long Id;
-        String name;
-    }
 }

@@ -1,7 +1,7 @@
 package com.duyduong.jobhunter.controller;
 
 
-import com.duyduong.jobhunter.domain.user.Company;
+import com.duyduong.jobhunter.domain.entity.Company;
 import com.duyduong.jobhunter.domain.dto.response.ResultPaginationDTO;
 import com.duyduong.jobhunter.service.CompanyService;
 import com.duyduong.jobhunter.util.annotation.ApiMessage;

@@ -3,7 +3,7 @@ package com.duyduong.jobhunter.domain.dto.request;
 
 import com.duyduong.jobhunter.constant.myEnum.EError;
 import com.duyduong.jobhunter.constant.myEnum.GenderEnum;
-import com.duyduong.jobhunter.domain.user.Company;
+import com.duyduong.jobhunter.domain.entity.Company;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;

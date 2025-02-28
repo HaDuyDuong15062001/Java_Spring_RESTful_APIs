@@ -2,8 +2,9 @@ package com.duyduong.jobhunter.service;
 
 import com.duyduong.jobhunter.constant.JobHunterError;
 
-import com.duyduong.jobhunter.domain.user.Company;
-import com.duyduong.jobhunter.domain.user.User;
+import com.duyduong.jobhunter.domain.entity.Company;
+import com.duyduong.jobhunter.domain.entity.CompanyOfUser;
+import com.duyduong.jobhunter.domain.entity.User;
 import com.duyduong.jobhunter.domain.dto.response.ResultPaginationDTO;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOCreate;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
@@ -45,12 +46,11 @@ public class UserService {
             throw new JobHunterException(JobHunterError.EMAIL_EXISTED);
         }
 
-        boolean IdCompany = this.companyRespository.existsById(userReqDTOCreate.getCompany().getId());
-        if (!IdCompany) {
+        Optional<Company> company = this.companyRespository.findById(userReqDTOCreate.getCompany().getId());
+        if (company == null) {
             throw new JobHunterException(JobHunterError.COMPANY_ID_NOT_FOUND);
         }
-        Optional<Company> company = this.companyRespository.findById(userReqDTOCreate.getCompany().getId());
-        UserResDTOCreate.CompanyUser companyUser = new UserResDTOCreate.CompanyUser();
+        CompanyOfUser companyUser = new CompanyOfUser();
         String hashPassword = this.passwordEncoder.encode(userReqDTOCreate.getPassword());
         userReqDTOCreate.setPassword(hashPassword);
         User user = this.mapper.map(userReqDTOCreate, User.class);
@@ -59,7 +59,7 @@ public class UserService {
 
         companyUser.setId(company.get().getId());
         companyUser.setName(company.get().getName());
-        userResDTOCreate.setCompanyUser(companyUser);
+        userResDTOCreate.setCompany(companyUser);
         return userResDTOCreate;
     }
 
@@ -71,10 +71,14 @@ public class UserService {
     }
 
     public UserResDTOFindById handleFindUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(
+        Optional<User> user = userRepository.findById(id).orElseThrow(
                 () -> new JobHunterException(JobHunterError.USER_ID_NOT_FOUND, List.of(id))
         );
         UserResDTOFindById userResDTOFindById = this.mapper.map(user, UserResDTOFindById.class);
+        CompanyOfUser companyOfUser = new CompanyOfUser();
+        companyOfUser.setId(user.getCompany().getId());
+        companyOfUser.setName(user.getName());
+        userResDTOFindById.setCompany(companyOfUser);
         return userResDTOFindById;
     }
 

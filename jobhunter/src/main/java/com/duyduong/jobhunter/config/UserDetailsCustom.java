@@ -20,7 +20,7 @@ public class UserDetailsCustom implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.duyduong.jobhunter.domain.user.User user = this.userService.handleGetUserByUsername(username);
+        com.duyduong.jobhunter.domain.entity.User user = this.userService.handleGetUserByUsername(username);
         return new User(
                 user.getEmail(),
                 user.getPassword(),

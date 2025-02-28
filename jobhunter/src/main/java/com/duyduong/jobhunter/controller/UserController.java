@@ -1,6 +1,6 @@
 package com.duyduong.jobhunter.controller;
 
-import com.duyduong.jobhunter.domain.user.User;
+import com.duyduong.jobhunter.domain.entity.User;
 import com.duyduong.jobhunter.domain.dto.response.ResultPaginationDTO;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOCreate;
 import com.duyduong.jobhunter.domain.dto.request.UserReqDTOUpdate;
@@ -9,7 +9,6 @@ import com.duyduong.jobhunter.domain.dto.response.UserResDTOFindById;
 import com.duyduong.jobhunter.domain.dto.response.UserResDTOUpdate;
 import com.duyduong.jobhunter.service.UserService;
 import com.duyduong.jobhunter.util.annotation.ApiMessage;
-import com.duyduong.jobhunter.util.error.IdInvalidException;
 import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;

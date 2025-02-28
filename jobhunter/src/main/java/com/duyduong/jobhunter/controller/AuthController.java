@@ -1,6 +1,6 @@
 package com.duyduong.jobhunter.controller;
 
-import com.duyduong.jobhunter.domain.user.User;
+import com.duyduong.jobhunter.domain.entity.User;
 import com.duyduong.jobhunter.domain.dto.request.RequestLoginDTO;
 import com.duyduong.jobhunter.domain.dto.response.ResLoginDTO;
 import com.duyduong.jobhunter.service.UserService;

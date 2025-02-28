@@ -1,6 +1,6 @@
 package com.duyduong.jobhunter.repository;
 
-import com.duyduong.jobhunter.domain.user.User;
+import com.duyduong.jobhunter.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
